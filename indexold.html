@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+  <head>
+       <link rel="stylesheet" type="text/css" href="framework7/css/framework7.material.min.css" class="uib-framework-theme">
+        
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKhOBqZP-Gej1xLry8_M7d8fZvp-E1FwA"
+            type="text/javascript"></script>
+	<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script></head>
+     
+	  	<script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+ <style>
+ 
+ body
+{
+	padding: 50px;
+}
+
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+.action-button
+{
+	position: relative;
+	padding: 10px 40px;
+  margin: 0px 10px 10px 0px;
+  float: left;
+	border-radius: 10px;
+	font-family: 'Pacifico', cursive;
+	font-size: 25px;
+	color: #FFF;
+	text-decoration: none;	
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+	position:center;
+}
+
+.red
+{
+	background-color: #E74C3C;
+	border-bottom: 5px solid #BD3E31;
+	text-shadow: 0px -2px #BD3E31;
+}
+
+.green
+{
+	background-color: #82BF56;
+	border-bottom: 5px solid #669644;
+	text-shadow: 0px -2px #669644;
+}
+
+.yellow
+{
+	background-color: #F2CF66;
+	border-bottom: 5px solid #D1B358;
+	text-shadow: 0px -2px #D1B358;
+}
+
+.action-button:active
+{
+	transform: translate(0px,5px);
+  -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}
+ </style>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+  };
+  firebase.initializeApp(config);
+  
+	</script>
+	 <script>
+ var userlat;
+ var userlong;
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+function showPosition(position) {
+   	userlat=position.coords.latitude;
+	userlong=position.coords.longitude;
+	localStorage.userlat=userlat;
+	localStorage.userlong=userlong;
+	//alert(userlat);
+}
+</script>
+    <title>House Where</title>
+      
+      <style>.mybutton{
+          background-color: chocolate;
+          border: groove;
+          color: aliceblue;
+          
+          
+          }
+      
+          .fields{
+              background-color: black;
+              color: aliceblue;
+              opacity: inherit;
+              
+              
+          }
+      </style>
+    
+      <script>
+      //unset boda login
+       // localStorage.clear();
+      // localStorage.removeItem("located");
+      // localStorage.removeItem("bodatag");
+      
+      
+      </script>
+
+      
+        
+    <script type="text/javascript">
+    //<![CDATA[
+    //get currrent location
+	var tyfo="For+rent";
+    var customIcons = {
+      
+      tyfo: {
+        icon: 'img/icon.png'
+      }
+         
+    };
+	function load(){
+	var map = new google.maps.Map(document.getElementById("map"), {
+        center: new google.maps.LatLng(localStorage.userlat,localStorage.userlong),
+        zoom: 13,
+        mapTypeId: 'roadmap'
+      });
+	     var infoWindow = new google.maps.InfoWindow;
+		 
+		   var email="israelmikan@gmail.com";
+var password="dangers";
+ firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});    var roomid;
+	   var starCountRef = firebase.database().ref('rooms/');
+        starCountRef.on('child_added', function(snapshot) {
+		var newPost=snapshot.val();
+		        console.log("Room Name: " + newPost.roomname);
+				  console.log("Type: " + newPost.roomtype);
+				  console.log("latitude: " + newPost.houselat);
+				  console.log("Longitude: " + newPost.houselong);
+				  console.log("Price: " + newPost.roomprice);				
+				  console.log("One Point Ends Here");
+				  // var idi = snapshot.key().val();
+				      roomid=newPost.roomId;
+					  var name = newPost.roomname;  
+                      var laty=newPost.houselat;
+                      var longy=newPost.houselong;
+					  var houselaty=newPost.houselat;
+					  var houselongy=newPost.houselong;
+					  var which=  localStorage.setItem("roomid",roomid);
+						//alert(localStorage.getItem("Pizza Point"));
+					  var address = newPost.roomprice;
+					  var finallat=newPost.houselat;
+					  var finallong=newPost.houselong;
+					  var houseprice=newPost.roomprice;
+					  var roomdetails=newPost.roomdetails;
+					  var room_picture=newPost.picture_url;
+					  var type = newPost.roomtype;
+					  var contact=newPost.contact_person;
+					  var lati=new google.maps.LatLng(laty,longy);
+					  var point = new google.maps.LatLng(
+					   parseFloat(newPost.laty),
+					   parseFloat(newPost.longy));
+						
+							  var link="";
+					  //var html = "<b>" + name + "</b> <br/>" + address+"</b> <br/>" + type+"<br><button class='mybutton'>Order</button>"+;
+						var html = " <img src="+room_picture+" width='300px; height='200px'><br>Room Detail : " + name + " <br> Room Desc : "+roomdetails+"<br>Room Contact: "+contact+"<br> Room Price: " + address+"</b> <br/> Room Type :" + type+""+"<form name='theform' action='room.html' method='get'>Price: <input  name='price' value='"+address+"' readonly='readonly''><input  name='latitu' hidden='hidden' value='"+laty+"' readonly='readonly''><input  name='longitu' hidden='hidden' value='"+longy+"' readonly='readonly''><input type='hidden'  name='room_picture' value='"+room_picture+"' readonly='readonly'><br><input type='hidden' name='idi' value='"+roomid+"'><br><input type='hidden' name='contact_person' value='"+contact+"'><br><input type='hidden' name='roomid' readonly='readonly' value='"+roomid+"'><input type='hidden' name='roomdetails' readonly='readonly' value='"+roomdetails+"'><input type='hidden' name='lati' readonly='readonly' value='"+lati+"'><input type='hidden' name='point' readonly='readonly' value='"+lati+"'><input type='submit' class='mybutoon' value='View Room'></form>";
+					//	var username = "supermarket";
+						
+						//if(type==username){
+							//alert("Found something");
+						//   var html="<form name='theform' action='cart/index.html' method='get'><input type='hidden' name='name' value='"+name+"'><input type='submit' class='mybutoon' value='Shop Now'>";
+						//}
+            
+				       // var icon = customIcons[type] || {};
+						var marker = new google.maps.Marker({
+						map: map,
+						position: lati,
+						title:name,
+						icon: 'img/icon.png'
+						
+					  });
+						bindInfoWindow(marker, map, infoWindow, html);
+				  
+				});
+	
+        infoWindow.addEventListener('click',function() {
+            window.location.assign("room.html");
+          });
+           marker.addListener('click', function() {
+              
+          marker.getPosition();
+            window.location.assign("room.html");
+          });
+
+	
+	
+	
+	
+	
+	}
+	function bindInfoWindow(marker, map, infoWindow, html) {
+      google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.setContent(html);
+        infoWindow.open(map, marker);
+      });
+    }
+
+    function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+          new ActiveXObject('Microsoft.XMLHTTP') :
+          new XMLHttpRequest;
+
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          request.onreadystatechange = doNothing;
+          callback(request, request.status);
+        }
+      };
+
+      request.open('GET', url, true);
+      request.send(null);
+    }
+
+    function doNothing() {}
+	
+	</script>
+	<script src="cordova.js" id="xdkJScordova_"></script>
+
+        <script src="js/app.js"></script>
+        <!-- for your event code, see README and file comments for details -->
+        <script src="js/init-app.js"></script>
+        <!-- for your init code, see README and file comments for details -->
+        <script src="xdk/init-dev.js"></script>
+       <link rel="stylesheet" href="css/buy.css">
+  </head>
+
+  <body onload="getLocation();load();"><style>.boda{
+      display: block;
+      border-radius: 20px;
+      color: white;
+    
+      }</style>
+      <main id="container">
+          <table><tr><td><h2> <img src="img/logo.png">House Where &nbsp;</h2></td><td>&nbsp; 
+              </td></tr></table>
+  
+  <div class="img-wrapper">
+    <a id="contactowner" href="uploadmain1.html" class="action-button shadow animate red"  >Add House</a>
+  </div>
+          <div id="map" style="width: 100%; height: 400px"></div>
+		  
+		  
+		  </main>
+  </body>
+
+</html>

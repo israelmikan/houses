@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+
+<script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+  };
+  firebase.initializeApp(config);
+</script>
+<script>
+function writey(){
+	var roomid=Math.floor(100000000 + Math.random() * 900000000);
+	localStorage.roomidy=roomid;
+	var database = firebase.database();
+	var email="israelmikan@gmail.com";
+	var password="dangers";
+	firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});
+	//writeUserData();
+	var roomid=localStorage.roomid;
+ function writeUserData(roomId, roomname, roomprice, roomlocation,roomtype,roomdetails,contact_person,picture_url) {
+  firebase.database().ref('rooms/' +roomid).set({
+    roomId: localStorage.roomid,
+    roomname: localStorage.roomname,
+    roomprice : localStorage.roomprice,
+	roomlocation: localStorage.roomlocation,
+    roomtype: localStorage.roomtype,
+    roomdetails : localStorage.roomdetails,
+	contact_person: localStorage.contact_person,
+    picture_url: localStorage.getItem("picture_data")
+    
+  });
+ // alert("Details Saved Successfully room Id "+localStorage.roomid);
+ 
+}
+
+	DelayRedirect();
+	}
+function go(){
+	//alert("going to maps");
+	
+	}
+function delayer(){
+    window.location = "maps.html"
+}
+</script>
+<script type="text/javascript">
+function DelayRedirect() {
+    var seconds = 5;
+    var dvCountDown = document.getElementById("dvCountDown");
+    var lblCount = document.getElementById("lblCount");
+    dvCountDown.style.display = "block";
+    lblCount.innerHTML = seconds;
+    setInterval(function () {
+        seconds--;
+        lblCount.innerHTML = seconds;
+        if (seconds == 0) {
+            dvCountDown.style.display = "none";
+            window.location = "maps.html";
+        }
+    }, 1000);
+}
+</script>
+</head>
+
+<body onload="writey();">
+<div id="dvCountDown" style = "display:none">
+<center>
+<img src="img/logo.png" /><br /><br />
+You will be redirected after <span id = "lblCount"></span>&nbsp;seconds.</center>
+</div>
+<center>&copy All rights Reserved Click the Globe Software INC</center>
+</body>
+</html>

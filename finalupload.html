@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Add House</title>
+	<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKhOBqZP-Gej1xLry8_M7d8fZvp-E1FwA"
+            type="text/javascript"></script>
+<script>
+ var config = {
+        apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+    };
+    firebase.initializeApp(config);
+	
+	
+	</script>
+	<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+ <script>
+ var userlat;
+ var userlong;
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+function showPosition(position) {
+   	userlat=position.coords.latitude;
+	userlong=position.coords.longitude;
+	//alert(userlat);
+}
+</script>
+<script>
+   function getValue(varname)
+{
+  // First, we load the URL into a variable
+  var url = window.location.href;
+
+  // Next, split the url by the ?
+  var qparts = url.split("?");
+
+  // Check that there is a querystring, return "" if not
+  if (qparts.length == 0)
+  {
+    return "";
+  }
+
+  // Then find the querystring, everything after the ?
+  var query = qparts[1];
+
+  // Split the query string into variables (separates by &s)
+  var vars = query.split("&");
+
+  // Initialize the value with "" as default
+  var value = "";
+
+  // Iterate through vars, checking each one for varname
+  for (i=0;i<vars.length;i++)
+  {
+    // Split the variable by =, which splits name and value
+    var parts = vars[i].split("=");
+    
+    // Check if the correct variable
+    if (parts[0] == varname)
+    {
+      // Load value into variable
+      value = parts[1];
+
+      // End the loop
+      break;
+    }
+  }
+  
+  // Convert escape code
+  value = unescape(value);
+
+  // Convert "+"s to " "s
+ // value.replace(/\+/g," ");
+
+  // Return the value
+  return value;
+}
+
+
+</script>
+<script>
+var roomname;
+var roomprice;
+var roomlocation;
+var roomtype;
+var roomdetails;
+var picture_url;
+var contact_person;
+var roomid=Math.floor(100000000 + Math.random() * 900000000);
+function Shoot(){
+ firebase.initializeApp(config);
+ 
+ 
+var roomid=Math.floor(100000000 + Math.random() * 900000000);
+ roomnamey= getValue("roomname");
+ roompricey=     getValue("price");
+ roomlocationy=   getValue("location");
+ roomtypey=       getValue("roomtype");
+ roomdetailsy=    getValue("roomdetails");
+ picture_urly=   getValue("room_picture");
+ contact_persony=getValue("contact_person");
+ localStorage.roomname=roomnamey;
+localStorage.roomprice=roompricey;
+localStorage.roomlocation=roomlocationy;
+localStorage.roomtype=roomtypey;
+localStorage.roomdetails=roomdetailsy;
+localStorage.contact_person=contact_persony;
+localStorage.roomid=roomid;
+var roompic=localStorage.getItem("picture_data");
+ 
+ 
+ validate(contact_persony);
+ 
+ function validate(phone) {
+    var regex = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+
+    if (regex.test(phone)) {
+        // Valid international phone number
+		 
+    } else {
+        alert("oops Enter Valid Phone number  eg +256705957020");
+		window.location.assign("index.html");
+    }
+}
+ 
+ 
+//alert(roomname);
+
+
+
+//alert("Room Id"+roomid);
+
+//writeUserData();
+go();
+}
+function go(){
+	//alert("going");
+	DelayRedirect();
+	}
+ //function writeUserData(roomId, roomname, roomprice, roomlocation,roomtype,roomdetails,contact_person,picture_url) {
+  //firebase.database().ref('rooms/' + localStorage.roomid).push({
+  //  roomId: localStorage.roomid,
+  //  roomname: localStorage.roomname,
+  //  roomprice : localStorage.roomprice,
+	//roomlocation: localStorage.roomlocation,
+   // roomtype: localStorage.roomtype,
+  ///  roomdetails : localStorage.roomdetails,
+	//contact_person: localStorage.contact_person,
+   // picture_url: localStorage.getItem("picture_data")
+    
+ // });
+  //alert("Details Saved Successfully room Id "+localStorage.roomid);
+  //localStorage.roomidentity=roomid;
+  //setTimeout('delayer()', 6000);
+ //window.location.assign("maps.html");
+//}
+
+function delayer(){
+    window.location = "test.html"
+}
+</script>
+
+ <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <style type="text/css">
+  #map-canvas {
+    width: 100%;
+    height: 300px;
+    float: center;
+  }
+  #info-panel {
+    float: bottom;
+    margin-left: 10px;
+  }
+  </style>
+ 
+  <script>
+  //start google maps
+  /*
+ * @fileoverview Sets up map with a single marker which can be
+ * dragged around the map and report it's lat, lng.
+ */
+ 
+ 
+/*
+ * Changes 'marker-state' div to show text.
+ * @param: str String to write.
+ */
+function updateMarkerStateTxt(str) {
+  document.getElementById('marker-state').innerHTML = str;
+}
+ 
+/*
+ * Update the position of our 'marker-position' marker.
+ * @param: latLng Maps LatLng object.
+ */
+function updateMarkerPositionTxt(latLng) {
+  document.getElementById('marker-position').innerHTML =
+     String(latLng.lat()) + ',' + String(latLng.lng());
+	 localStorage.houselat=latLng.lat();
+	 localStorage.houselong=latLng.lng();
+	 document.getElementById("houselat").value = localStorage.houselat;
+	 document.getElementById("houselong").value = localStorage.houselong;
+	 
+	 //alert("in local"+localStorage.houselat);
+}
+ 
+/*
+ * Sets up Google map into 'map-canvas' div and adds the
+ * the starting marker and a drag listener.
+ */
+ var oklat=parseFloat(userlat);
+ var oklong=parseFloat(userlong);
+function initialize() {
+  var latLng = new google.maps.LatLng(localStorage.houselat,localStorage.houselong);
+  var map = new google.maps.Map(document.getElementById('map-canvas'), {
+      zoom: 17,
+      center: latLng,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+  });
+  var marker = new google.maps.Marker({
+      position: latLng,
+      title: 'Drag to House Location',
+      map: map,
+      draggable: true
+  });
+ 
+  // Update marker position txt.
+  updateMarkerPositionTxt(latLng);
+ 
+  // Add dragging event listeners.
+  google.maps.event.addListener(marker, 'dragstart', function() {
+      updateMarkerStateTxt('Dragging start...');
+  });
+ 
+  google.maps.event.addListener(marker, 'drag', function() {
+      updateMarkerStateTxt('Dragging...');
+      updateMarkerPositionTxt(marker.getPosition());
+  });
+ 
+  google.maps.event.addListener(marker, 'dragend', function() {
+      updateMarkerStateTxt('Drag ended');
+  });
+}
+ 
+// Onload handler to fire off the app:
+google.maps.event.addDomListener(window, 'load', initialize);
+  
+  //end google mpa
+  
+  
+  </script>
+  
+</head>
+<body onload="Shoot(); getLocation();" >
+ <div id="dvCountDown" style = "display:none">
+<center><img src="img/logo.png" /><br>  You will be redirected after <span id = "lblCount"></span>&nbsp;seconds.</center>
+</div>
+ <script type="text/javascript">
+function DelayRedirect() {
+    var seconds = 5;
+    var dvCountDown = document.getElementById("dvCountDown");
+    var lblCount = document.getElementById("lblCount");
+    dvCountDown.style.display = "block";
+    lblCount.innerHTML = seconds;
+    setInterval(function () {
+        seconds--;
+        lblCount.innerHTML = seconds;
+        if (seconds == 0) {
+            dvCountDown.style.display = "none";
+            window.location = "test.html";
+        }
+    }, 1000);
+}
+</script><br> <br> 
+<center>&copy All rights Reserved Click the Globe Software INC</center>
+</body>
+</html>

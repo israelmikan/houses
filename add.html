@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+
+    <title>Capture Photo</title>
+        <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1"/>
+  
+    <script src="https://www.gstatic.com/firebasejs/3.6.1/firebase.js"></script>
+    
+     <script>
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition,showError);
+    } else {
+        //x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+function showPosition(position) {
+   // x.innerHTML = "Latitude: " + position.coords.latitude +
+  //  "<br>Longitude: " + position.coords.longitude;
+    localStorage.laty=position.coords.latitude;
+    localStorage.longy=position.coords.longitude;
+   // alert(localStorage.laty);
+}
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert("Please Turn On Location to Continue.");
+			window.location.assign("index.html");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable Try Again.");
+			window.location.assign("index.html");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get location timed out.");
+			window.location.assign("index.html");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("Ooops unknown error occurred try Again.");
+			window.location.assign("index.html");
+            break;
+    }
+}
+</script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCzmrZ-UBQWmj5qt-kDVjPANqJjP0EIhIE",
+    authDomain: "rwanda.firebaseapp.com",
+    databaseURL: "https://rwanda.firebaseio.com",
+    storageBucket: "firebase-rwanda.appspot.com",
+    messagingSenderId: "783535704599"
+  };
+  firebase.initializeApp(config);</script>
+    <script type="text/javascript" charset="utf-8">
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value 
+    // Wait for PhoneGap to connect with the device
+    //
+    document.addEventListener("deviceready",onDeviceReady,false);
+    // PhoneGap is ready to be used!
+    //
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+	
+    }
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoDataSuccess(imageData) {
+      // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+	  var imagey="data:image/jpeg;base64," + imageData;
+	  localStorage.setItem("picture_data",imagey);
+	  
+	  if(localStorage.getItem("picture_data") != ' '){
+		 // alert("in LocalStorage we have"+localStorage.getItem("picture_data"));
+		  window.location.assign("uploadmain1.html");
+		  }else{
+			  alert("Ooops Picture cannot be Empty try again");
+			  window.location.assign("index.html");
+			  }
+    }
+    
+	// Called when a photo is successfully retrieved
+    //
+    function onPhotoFileSuccess(imageData) {
+      // Get image handle
+      console.log(JSON.stringify(imageData));
+      
+   	  // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = imageData;
+	   var imagey="data:image/jpeg;base64," + imageData;
+	    localStorage.setItem("picture_data",imagey);
+	  //alert(imagey);
+    }
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+      // Uncomment to view the image file URI 
+      // console.log(imageURI);
+      // Get image handle
+      //
+      var largeImage = document.getElementById('largeImage');
+      // Unhide image elements
+      //
+      largeImage.style.display = 'block';
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+	  
+	  
+      largeImage.src = imageURI;
+	  var imagey="data:image/jpeg;base64," + imageURI;
+	  localStorage.setItem("picture_data",imagey);
+	  
+	  if(localStorage.getItem("picture_data") != ' '){
+		  // alert("in LocalStorage we have "+localStorage.getItem("picture_data"));		  
+		  window.location.assign("uploadmain1.html");
+		  }
+	
+	
+    }
+    // A button will call this function
+    //
+    function capturePhotoWithData() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+    }
+    function capturePhotoWithFile() {
+        navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+    }
+    
+    // A button will call this function
+    //
+    function getPhoto(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
+    // Called if something bad happens.
+    // 
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+	function redirect(){
+		
+		
+		}
+    </script>
+  </head>
+  <body onload="getLocation();">
+  <center><img src="img/logo.png" />
+  <h3>Add House Photo</h3>
+
+    <button onclick="capturePhotoWithData();"><img src="img/camera.png" /></button> <br><br>
+   <!-- <button onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> <br> -->
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);"><img src="img/upload.png" /></button><br><br>
+   <!-- <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+   <input type="text" id="comment" maxlength="40" style="visibility:hidden" /><br>
+   -->
+    
+    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+    <img style="display:none;" id="largeImage" src="" />
+    <script type="text/javascript" src="cordova.js"></script>
+   <!-- <script type="text/javascript" src="js/index.js"></script> -->
+   
+      </center><br /><br />
+      
+       <center>
+	<center> &copy; Click the Globe INC  2016 </center></center>
+
+  </body>
+</html>

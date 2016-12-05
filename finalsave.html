@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Add House</title>
+	<script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+
+<script>
+ var config = {
+        apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+    };
+    firebase.initializeApp(config);
+	
+	
+	</script>
+	<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+<script>
+   function getValue(varname)
+{
+  // First, we load the URL into a variable
+  var url = window.location.href;
+
+  // Next, split the url by the ?
+  var qparts = url.split("?");
+
+  // Check that there is a querystring, return "" if not
+  if (qparts.length == 0)
+  {
+    return "";
+  }
+
+  // Then find the querystring, everything after the ?
+  var query = qparts[1];
+
+  // Split the query string into variables (separates by &s)
+  var vars = query.split("&");
+
+  // Initialize the value with "" as default
+  var value = "";
+
+  // Iterate through vars, checking each one for varname
+  for (i=0;i<vars.length;i++)
+  {
+    // Split the variable by =, which splits name and value
+    var parts = vars[i].split("=");
+    
+    // Check if the correct variable
+    if (parts[0] == varname)
+    {
+      // Load value into variable
+      value = parts[1];
+
+      // End the loop
+      break;
+    }
+  }
+    // Convert escape code
+  value = unescape(value);
+
+  // Convert "+"s to " "s
+ // value.replace(/\+/g," ");
+
+  // Return the value
+  return value;
+}
+
+</script>
+<script>
+
+ houselat= getValue("houselat");
+ houselong=     getValue("houselong");
+ roomig=   localStorage.roomidentity;
+
+
+
+firebase.initializeApp(config);
+ 
+ var database = firebase.database();
+ var email="israelmikan@gmail.com";
+var password="dangers";
+ firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});
+
+function update(){
+var adaNameRef = firebase.database().ref('rooms/'+roomig);
+// Modify the 'first' and 'last' properties, but leave other data at
+// adaNameRef unchanged.
+adaNameRef.update({ houselat: houselat, houselong: houselong, whouploaded:localStorage.whologgedin });
+ alert("Update Successfull");
+DelayRedirect();
+}
+</script>
+ <script type="text/javascript">
+function DelayRedirect() {
+    var seconds = 6;
+    var dvCountDown = document.getElementById("dvCountDown");
+    var lblCount = document.getElementById("lblCount");
+    dvCountDown.style.display = "block";
+    lblCount.innerHTML = seconds;
+    setInterval(function () {
+        seconds--;
+        lblCount.innerHTML = seconds;
+        if (seconds == 0) {
+            dvCountDown.style.display = "none";
+            window.location = "index.html";
+        }
+    }, 1000);
+}
+</script>
+</head><body onload="update();">
+ <div id="dvCountDown" style = "display:none">
+<center> <img src="img/logo.png"><br> <h3> Saving Room details Redirecting in<span id = "lblCount"></span>&nbsp;seconds.</h3></center>
+</div><center>
+<p style="background-color:black; color:white;"><marquee> &copy; All rights Reserved Click The Globe INC</marquee></p></center>
+</body></html>

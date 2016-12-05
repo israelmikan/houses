@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Maps</title>
+<style>
+#myMap {
+   height: 350px;
+   width: 100%;
+}
+</style>
+ <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+</head>
+
+<body>
+
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false">
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+</script>
+<script type="text/javascript"> 
+var map;
+var marker;
+var laty=parseFloat(localStorage.laty);
+var longy=parseFloat(localStorage.longy);
+//alert(localStorage.laty);
+
+var myLatlng = new google.maps.LatLng(laty,longy);
+var geocoder = new google.maps.Geocoder();
+var infowindow = new google.maps.InfoWindow();
+function initialize(){
+var mapOptions = {
+zoom: 18,
+center: myLatlng,
+mapTypeId: google.maps.MapTypeId.SATELLITE
+};
+
+map = new google.maps.Map(document.getElementById("myMap"), mapOptions);
+
+marker = new google.maps.Marker({
+map: map,
+position: myLatlng,
+draggable: true 
+}); 
+
+geocoder.geocode({'latLng': myLatlng }, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#latitude,#longitude').show();
+$('#address').val(results[0].formatted_address);
+$('#latitude').val(marker.getPosition().lat());
+$('#longitude').val(marker.getPosition().lng());
+infowindow.setContent(results[0].formatted_address);
+infowindow.open(map, marker);
+}
+}
+});
+
+google.maps.event.addListener(marker, 'dragend', function() {
+
+geocoder.geocode({'latLng': marker.getPosition()}, function(results, status) {
+if (status == google.maps.GeocoderStatus.OK) {
+if (results[0]) {
+$('#address').val(results[0].formatted_address);
+$('#latitude').val(marker.getPosition().lat());
+var lai=marker.getPosition().lat();
+var lati=marker.getPosition().lng();
+localStorage.houselat=lai;
+localStorage.houselong=lati;
+//alert(localStorage.houselong);
+$('#longitude').val(marker.getPosition().lng());
+infowindow.setContent(results[0].formatted_address);
+infowindow.open(map, marker);
+}
+}
+});
+});
+
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+
+
+<center><img src="img/logo.png" />
+<h4 style="font-family:'Palatino Linotype', 'Book Antiqua', Palatino, serif">Drag The Marker To Exact House Location</h4>
+</center>
+<div id="myMap"></div>
+<center>
+<input type="text" id="latitude" placeholder="Latitude" readonly="readonly"/><br />
+<input type="text" id="longitude" placeholder="Longitude" readonly="readonly"/></center>
+<center><input type="submit" value="Update Location" onclick="updateLoc();" style="width:150px; height:50px; border-radius:15px; background-color:black; color:white;" /></center>
+</div>
+<script>
+ var config = {
+        apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+    };
+    firebase.initializeApp(config);
+	
+	
+	</script>
+<script>
+function updateLoc(){
+	//alert("We are heer");
+	var latitude=document.getElementById("latitude").value;
+	var longitude=document.getElementById("longitude").value;
+	//alert(longitude);
+	//alert("room id"+localStorage.roomid);
+	writeUserData();
+}
+var roomid=localStorage.roomidy;
+function writeUserData(roomId, roomname, roomprice, roomlocation,roomtype,roomdetails,contact_person,houselat,houselong,picture_url,publishedby) {
+  firebase.database().ref('rooms/' +roomid).set({
+    roomId: localStorage.roomidy,
+    roomname: localStorage.roomname,
+    roomprice : localStorage.roomprice,
+	roomlocation: localStorage.roomlocation,
+    roomtype: localStorage.roomtype,
+    roomdetails : localStorage.roomdetails,
+	contact_person: localStorage.contact_person,
+	houselat:localStorage.houselat,
+	houselong:localStorage.houselong,
+    picture_url: localStorage.getItem("picture_data"),
+	publishedby:localStorage.whologgedin
+    
+  });
+  alert("Details Saved Successfully House Id :"+localStorage.roomidy);
+//alert("house price"+ localStorage.roomprice);
+//alert("Picture data"+localStorage.getItem("picture_data"));
+window.location.assign("index.html");
+//document.getElementById("homing").style.visibility=visible;
+}
+
+
+	function Update(status) {
+		var database = firebase.database();
+  
+  //alert("Location Updated for room "+localStorage.roomid);
+}
+
+function DelayRedirect() {
+    var seconds = 5;
+    var dvCountDown = document.getElementById("dvCountDown");
+    var lblCount = document.getElementById("lblCount");
+    dvCountDown.style.display = "block";
+    lblCount.innerHTML = seconds;
+    setInterval(function () {
+        seconds--;
+        lblCount.innerHTML = seconds;
+        if (seconds == 0) {
+            dvCountDown.style.display = "none";
+            window.location = "index.html";
+        }
+    }, 1000);
+}
+
+</script>
+<script type="text/javascript">
+
+</script>
+<center>
+<div id="dvCountDown" style = "display:none">
+<center>
+<img src="img/logo.png" /><br />
+<strong>Note:</strong> You will be redirected to Houses &nbsp;seconds.</center>
+</div>
+<center>&copy All rights Reserved Click the Globe Software INC</center>
+</body>
+</html>

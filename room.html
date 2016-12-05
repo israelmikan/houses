@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Room Details</title>
+	    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		  	<script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+  };
+  firebase.initializeApp(config);
+  
+	</script>
+	<script>
+   function getValue(varname)
+{
+  // First, we load the URL into a variable
+  var url = window.location.href;
+
+  // Next, split the url by the ?
+  var qparts = url.split("?");
+
+  // Check that there is a querystring, return "" if not
+  if (qparts.length == 0)
+  {
+    return "";
+  }
+
+  // Then find the querystring, everything after the ?
+  var query = qparts[1];
+
+  // Split the query string into variables (separates by &s)
+  var vars = query.split("&");
+
+  // Initialize the value with "" as default
+  var value = "";
+
+  // Iterate through vars, checking each one for varname
+  for (i=0;i<vars.length;i++)
+  {
+    // Split the variable by =, which splits name and value
+    var parts = vars[i].split("=");
+    
+    // Check if the correct variable
+    if (parts[0] == varname)
+    {
+      // Load value into variable
+      value = parts[1];
+
+      // End the loop
+      break;
+    }
+  }
+    // Convert escape code
+  value = unescape(value);
+
+  // Convert "+"s to " "s
+ // value.replace(/\+/g," ");
+
+  // Return the value
+  return value;
+}
+
+</script>
+ <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+ 
+ <style>
+ 
+ body
+{
+	padding: 50px;
+}
+
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+.action-button
+{
+	position: relative;
+	padding: 10px 40px;
+  margin: 0px 10px 10px 0px;
+  float: left;
+	border-radius: 10px;
+	font-family: 'Pacifico', cursive;
+	font-size: 25px;
+	color: #FFF;
+	text-decoration: none;	
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+	position:center;
+}
+
+.red
+{
+	background-color: #E74C3C;
+	border-bottom: 5px solid #BD3E31;
+	text-shadow: 0px -2px #BD3E31;
+}
+
+.green
+{
+	background-color: #82BF56;
+	border-bottom: 5px solid #669644;
+	text-shadow: 0px -2px #669644;
+}
+
+.yellow
+{
+	background-color: #F2CF66;
+	border-bottom: 5px solid #D1B358;
+	text-shadow: 0px -2px #D1B358;
+}
+
+.action-button:active
+{
+	transform: translate(0px,5px);
+  -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}
+ </style>
+ 
+    <style>
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 350px;
+        width: 100%;
+      }
+      #right-panel {
+        float: none;
+        width: 100%;
+        padding-left: 2%;
+      }
+      #output {
+        font-size: 11px;
+      }
+    </style>
+      <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+ 
+      <script>
+      
+     function showIt() {
+      document.getElementById("map").style.display = "block";
+    }
+      </script>
+	  
+	  	 <script>
+ var userlat;
+ var userlong;
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Location Turned off. Turn on Location and continue");
+		window.location.assign("index.html");
+		
+    }
+}
+function showPosition(position) {
+   	userlat=position.coords.latitude;
+	userlong=position.coords.longitude;
+	localStorage.userlat=userlat;
+	localStorage.userlong=userlong;
+	//alert(userlat);
+}
+</script>
+  </head>
+  <body onload="getLocation(); DelayRedirect();">
+    <script>
+var roomid=getValue("roomid");
+
+var ty=parseFloat(finallong);
+//alert("longitude"+ty);
+var contact=getValue("contact_person");
+localStorage.contact=contact;
+var roompicture=getValue("room_picture");
+var desc=getValue("roomdetails");
+var point=getValue("lati");
+var latp=getValue("latitu");
+var longt=getValue("longitu");
+var finallat=parseFloat(latp);
+var finallong=parseFloat(longt);
+localStorage.finallat=finallat;
+localStorage.finallong=finallong;
+localStorage.roomprice=getValue("price");
+localStorage.roomdetails=desc;
+localStorage.picture=room_picture;
+var tellink="tel:"+contact;
+ document.getElementById("contactowner").href = tellink;
+
+ 
+ //alert("Got latitude"+longt);
+//alert("laty"+point);
+
+//alert("house point"+point);
+</script>
+    <div id="right-panel">
+      <div id="inputs">
+        
+      </div>
+      <div>
+       <center> <img src="img/logo.png"><br> <strong>House Location</strong>
+	    
+	   
+	   </center>
+      </div>
+      <div id="output"></div>
+    </div>
+      
+    <div id="map"></div>
+      <script>
+	  function callowner(){
+	   window.location="tel:"+localStorage.contact;
+	  }
+	  
+	  </script>
+	  
+	   <script type="text/javascript">
+function DelayRedirect() {
+    var seconds = 6;
+    var dvCountDown = document.getElementById("dvCountDown");
+    var lblCount = document.getElementById("lblCount");
+    dvCountDown.style.display = "block";
+    lblCount.innerHTML = seconds;
+    setInterval(function () {
+        seconds--;
+        lblCount.innerHTML = seconds;
+        if (seconds == 0) {
+            dvCountDown.style.display = "none";
+            window.location = "finalroom.html";
+        }
+    }, 1000);
+}
+</script>
+	<div id="details"></div><br>
+<div id="dvCountDown" style = "display:none">
+<center> <img src="img/logo.png"><br> <h3> Gathering details Redirecting in <span id = "lblCount"></span>&nbsp; seconds.</h3></center>
+</div>
+<center><a id="contactowner" href="index.html" class="action-button shadow animate green"  >Home</a></center>
+	<center hidden="hidden"><a id="contactowner" href="" class="action-button shadow animate blue" onclick="callowner();" >Contact Owner</a></center>
+    <script>
+//end making route
+        
+        var latyi=parseFloat(localStorage.userlat);
+		var longiu=parseFloat(localStorage.userlong);
+        var cuslati=localStorage.latitude;       
+      
+       function initMap() {
+        
+        
+        var bounds = new google.maps.LatLngBounds;
+        var markersArray = [];
+
+        var origin1 = {lat:	latyi,lng: longiu};
+        var destinationB = {lat:finallat,lng: finallong};
+
+        //var destinationIcon = 'https://chart.googleapis.com/chart?' +
+        //    'chst=d_map_pin_letter&chld=D|FF0000|000000';
+        //var originIcon = 'https://chart.googleapis.com/chart?' +
+        //    'chst=d_map_pin_letter&chld=O|FFFF00|000000';
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat:finallat,lng:finallong},
+          zoom: 15,
+		  mapTypeId: 'terrain'
+        });
+		//start drection
+        var geocoder = new google.maps.Geocoder;
+        
+     
+		//end directions
+		//start polyline
+		//var flightPlanCoordinates = [
+       //   {lat:	latyi,lng: longiu},
+       //   {lat:finallat,lng: finallong}
+      //  ];
+       // var flightPath = new google.maps.Polyline({
+        //  path: flightPlanCoordinates,
+        //  geodesic: true,
+       //   strokeColor: '#FF0000',
+        //  strokeOpacity: 1.0,
+       //   strokeWeight: 2
+       // });
+		
+		 var marker = new google.maps.Marker({
+          position: destinationB,
+          map: map,
+          title: 'Selected room is here!'
+        });
+         marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+        var contentString=roomdetails;
+		 var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+       // flightPath.setMap(map);
+		   
+	 //end polyline
+          //start route drawing
+        var directionsService = new google.maps.DirectionsService();
+  var directionsRequest = {
+  origin: origin1,
+  destination: destinationB,
+  travelMode: google.maps.DirectionsTravelMode.DRIVING,
+  unitSystem: google.maps.UnitSystem.METRIC
+};  
+       //calculate route
+          directionsService.route(
+  directionsRequest,
+  function(response, status)
+  {
+    if (status == google.maps.DirectionsStatus.OK)
+    {
+      new google.maps.DirectionsRenderer({
+        map: map,
+        directions: response
+      });
+    }
+    else
+     
+      alert("Unable to retrieve your Turn on Location");
+	 // window.location.assign("index.html");
+      
+  }
+);  
+	 
+		
+        var service = new google.maps.DistanceMatrixService;
+        service.getDistanceMatrix({
+          origins: [origin1],
+          destinations: [destinationB],
+          travelMode: 'DRIVING',
+          unitSystem: google.maps.UnitSystem.METRIC,
+          avoidHighways: false,
+          avoidTolls: false
+        }, function(response, status) {
+          if (status !== 'OK') {
+            alert('Error was: ' + status);
+          } else {
+            var originList = response.originAddresses;
+            var destinationList = response.destinationAddresses;
+            var outputDiv = document.getElementById('output');
+			var detailsDiv = document.getElementById('details');
+            outputDiv.innerHTML = '';
+            deleteMarkers(markersArray);
+
+            var showGeocodedAddressOnMap = function(asDestination) {
+              var icon = asDestination ? destinationIcon : originIcon;
+              return function(results, status) {
+                if (status === 'OK') {
+                  map.fitBounds(bounds.extend(results[0].geometry.location));
+                  markersArray.push(new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location,
+                    icon: icon
+                  }));
+                } else {
+                  alert('Geocode was not successful due to: ' + status);
+                }
+              };
+            };
+
+            for (var i = 0; i < originList.length; i++) {
+              var results = response.rows[i].elements;
+              geocoder.geocode({'address': originList[i]},
+                  showGeocodedAddressOnMap(false));
+              for (var j = 0; j < results.length; j++) {
+                geocoder.geocode({'address': destinationList[j]},
+                    showGeocodedAddressOnMap(true));
+                outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
+                    ': ' + results[j].distance.text + ' in ' +
+                    results[j].duration.text + '<br>';
+					localStorage.setItem("distance",results[j].distance.text);
+			        localStorage.setItem("duration",results[j].duration.text);
+              }
+			   
+			   alert("Distance "+localStorage.getItem("distance")+"in"+localStorage.getItem("duration"));
+                var bodabill=localStorage.getItem("distance");
+                var toint=parseFloat(bodabill);
+                var charge=toint*1000;
+                var charge2=charge+500;
+                var allcash=charge2+tofloat;
+                
+                localStorage.setItem("alltopay",allcash);
+                localStorage.bodabill=charge;
+                localStorage.subtotal=allcash;
+                //alert("All cash="+allcash);
+                //alert("Total Bill"+charge);
+                //localStorage.bodafees=charge;
+                //var curtotal=localStorage.total;
+                //var toynt=parseint(cutotal);                
+               // var newtotal=toynt+charge; 
+                //detailsDiv.innerHTML +="<br><hr>Delivery Costs: <br>"+charge2+" <br>  Total order is "+localStorage.supertotal+" Sub Total:"+allcash+"<a href='final.html'><input type='submit' value='Confirm Order' style='background-color:black; color:white; width:100px; height:40px; display:block;'></a>";
+            }
+          }
+        });
+      }
+	  
+
+      function deleteMarkers(markersArray) {
+        for (var i = 0; i < markersArray.length; i++) {
+          markersArray[i].setMap(null);
+        }
+        markersArray = [];
+		
+		
+      }
+    </script>
+ 
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKhOBqZP-Gej1xLry8_M7d8fZvp-E1FwA&callback=initMap">
+    </script>
+	<!-- disqus here -->
+	
+
+	
+	<center><br><br>
+	<p style="background-color:black; color:white;"><marquee> &copy; All rights Reserved Click The Globe INC</marquee></p></center>
+
+  </body>
+</html>

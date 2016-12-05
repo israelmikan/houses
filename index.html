@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. 
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />-->
+       <link rel="stylesheet" type="text/css" href="framework7/css/framework7.material.min.css" class="uib-framework-theme">
+        
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKhOBqZP-Gej1xLry8_M7d8fZvp-E1FwA"
+            type="text/javascript"></script>
+	<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script></head>
+     
+	  	<script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js"></script>
+<style>
+body {
+    font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    text-align:center;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+
+}
+
+.sidenav a:hover{
+    color: blue;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
+ <style>
+ 
+
+
+.animate
+{
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
+}
+
+.action-button
+{
+	position: relative;
+	padding: 10px 40px;
+  margin: 0px 10px 10px 0px;
+  float: left;
+	border-radius: 10px;
+	font-family: 'Pacifico', cursive;
+	font-size: 25px;
+	color: #FFF;
+	text-decoration: none;	
+}
+
+.blue
+{
+	background-color: #3498DB;
+	border-bottom: 5px solid #2980B9;
+	text-shadow: 0px -2px #2980B9;
+	position:center;
+}
+
+.red
+{
+	background-color: #E74C3C;
+	border-bottom: 5px solid #BD3E31;
+	text-shadow: 0px -2px #BD3E31;
+}
+
+.green
+{
+	background-color: #82BF56;
+	border-bottom: 5px solid #669644;
+	text-shadow: 0px -2px #669644;
+}
+
+.yellow
+{
+	background-color: #F2CF66;
+	border-bottom: 5px solid #D1B358;
+	text-shadow: 0px -2px #D1B358;
+}
+
+.action-button:active
+{
+	transform: translate(0px,5px);
+  -webkit-transform: translate(0px,5px);
+	border-bottom: 1px solid;
+}
+ </style>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+  };
+  firebase.initializeApp(config);
+  
+	</script>
+	 <script>
+ var userlat;
+ var userlong;
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+function showPosition(position) {
+   	userlat=position.coords.latitude;
+	userlong=position.coords.longitude;
+	localStorage.userlat=userlat;
+	localStorage.userlong=userlong;
+	//alert(userlat);
+}
+</script>
+    <title>House Where</title>
+      
+      <style>.mybutton{
+          background-color: chocolate;
+          border: groove;
+          color: aliceblue;
+          
+          
+          }
+      
+          .fields{
+              background-color: black;
+              color: aliceblue;
+              opacity: inherit;
+              
+              
+          }
+      </style>
+    
+      <script>
+      //unset boda login
+       // localStorage.clear();
+      // localStorage.removeItem("located");
+      // localStorage.removeItem("bodatag");
+      
+      
+      </script>
+
+      
+        
+    <script type="text/javascript">
+    //<![CDATA[
+    //get currrent location
+	var tyfo="For+rent";
+    var customIcons = {
+      
+      tyfo: {
+        icon: 'img/icon.png'
+      }
+         
+    };
+	function load(){
+		//alert("Device mode"+localStorage.devicemodel);
+	var map = new google.maps.Map(document.getElementById("map"), {
+        center: new google.maps.LatLng(localStorage.userlat,localStorage.userlong),
+        zoom: 16,
+        mapTypeId: 'roadmap'
+      });
+	     var infoWindow = new google.maps.InfoWindow;
+		 
+		   var email="israelmikan@gmail.com";
+var password="dangers";
+ firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});    var roomid;
+	   var starCountRef = firebase.database().ref('rooms/');
+        starCountRef.on('child_added', function(snapshot) {
+		var newPost=snapshot.val();
+		        console.log("Room Name: " + newPost.roomname);
+				  console.log("Type: " + newPost.roomtype);
+				  console.log("latitude: " + newPost.houselat);
+				  console.log("Longitude: " + newPost.houselong);
+				  console.log("Price: " + newPost.roomprice);				
+				  console.log("One Point Ends Here");
+				  // var idi = snapshot.key().val();
+				      roomid=newPost.roomId;
+					  var name = newPost.roomname;  
+                      var laty=newPost.houselat;
+                      var longy=newPost.houselong;
+					  var houselaty=newPost.houselat;
+					  var houselongy=newPost.houselong;
+					  var which=  localStorage.setItem("roomid",roomid);
+						//alert(localStorage.getItem("Pizza Point"));
+					  var address = newPost.roomprice;
+					  var finallat=newPost.houselat;
+					  var finallong=newPost.houselong;
+					  var houseprice=newPost.roomprice;
+					  var roomdetails=newPost.roomdetails;
+					  var room_picture=newPost.picture_url;
+					  var type = newPost.roomtype;
+					  var contact=newPost.contact_person;
+					  var lati=new google.maps.LatLng(laty,longy);
+					  var point = new google.maps.LatLng(
+					   parseFloat(newPost.laty),
+					   parseFloat(newPost.longy));
+						roomdetails= roomdetails.replace("+", " ");
+							  var link="";
+					  //var html = "<b>" + name + "</b> <br/>" + address+"</b> <br/>" + type+"<br><button class='mybutton'>Order</button>"+;
+						var html = "<strong width='400px'> <img src="+room_picture+" width='300px; height='200px'><br>Room Detail :&nbsp;&nbsp;<strong> " + name + "<br>   <p style='word-wrap: break-word; font-family:Trebuchet MS', Arial, Helvetica, sans-serif'>Room Desc :"+roomdetails+"</strong></p>Room Contact:&nbsp;<strong> "+contact+"</strong><br/> Room Type: &nbsp;&nbsp;<strong>" + type+"</strong>"+"<form name='theform' action='room.html' method='get'>Price: <input  name='price' value='"+address+"' readonly='readonly''><input  name='latitu' hidden='hidden' value='"+laty+"' readonly='readonly''><input  name='longitu' hidden='hidden' value='"+longy+"' readonly='readonly''><input type='hidden'  name='room_picture' value='"+room_picture+"' readonly='readonly'><br><input type='hidden' name='idi' value='"+roomid+"'><br><input type='hidden' name='contact_person' value='"+contact+"'><br><input type='hidden' name='roomid' readonly='readonly' value='"+roomid+"'><input type='hidden' name='roomdetails' readonly='readonly' value='"+roomdetails+"'><input type='hidden' name='lati' readonly='readonly' value='"+lati+"'><input type='hidden' name='point' readonly='readonly' value='"+lati+"'><input type='submit' class='mybutoon' value='View Room'></form></strong>";
+					//	var username = "supermarket";
+						
+						//if(type==username){
+							//alert("Found something");
+						//   var html="<form name='theform' action='cart/index.html' method='get'><input type='hidden' name='name' value='"+name+"'><input type='submit' class='mybutoon' value='Shop Now'>";
+						//}
+            
+				       // var icon = customIcons[type] || {};
+						var marker = new google.maps.Marker({
+						map: map,
+						position: lati,
+						title:name,
+						icon: 'img/icon.png'
+						
+					  });
+						bindInfoWindow(marker, map, infoWindow, html);
+				  
+				});
+	
+        infoWindow.addEventListener('click',function() {
+            window.location.assign("room.html");
+          });
+           marker.addListener('click', function() {
+              
+          marker.getPosition();
+            window.location.assign("room.html");
+          });
+
+	
+	
+	
+	
+	
+	}
+	function bindInfoWindow(marker, map, infoWindow, html) {
+      google.maps.event.addListener(marker, 'click', function() {
+        infoWindow.setContent(html);
+        infoWindow.open(map, marker);
+      });
+    }
+
+    function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+          new ActiveXObject('Microsoft.XMLHTTP') :
+          new XMLHttpRequest;
+
+      request.onreadystatechange = function() {
+        if (request.readyState == 4) {
+          request.onreadystatechange = doNothing;
+          callback(request, request.status);
+        }
+      };
+
+      request.open('GET', url, true);
+      request.send(null);
+    }
+
+    function doNothing() {}
+	
+	</script>
+	<script src="cordova.js" id="xdkJScordova_"></script>
+
+        <script src="js/app.js"></script>
+        <!-- for your event code, see README and file comments for details -->
+        <script src="js/init-app.js"></script>
+        <!-- for your init code, see README and file comments for details -->
+        <script src="xdk/init-dev.js"></script>
+       <link rel="stylesheet" href="css/buy.css">
+  </head>
+
+  <body onload="getLocation();load();"><style>.boda{
+      display: block;
+      border-radius: 20px;
+      color: white;
+    
+      }</style>
+      
+      
+          <table width="100%"><tr><td><h2> <img src="img/logo.png"></h2></td> <td  style="background-position:right;  padding-right:10px;"> <div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="add.html">Add House</a>
+ <!--  <a href="#">Browse</a>
+ <a href="#">Clients</a>
+  <a href="#">Contact</a> -->
+</div><span style="font-size:30px;cursor:pointer; background-position:right;" onclick="openNav()">&#9776; </span></td></tr></table>
+
+          <div id="map" style="width: 100%; height: 400px"></div>
+		  
+		  
+		  
+		  
+  <center><br><br>
+	<p style="background-color:yellow; color:black;"> &copy; All rights Reserved <a href="mailto:clicktheglobe.com">Click The Globe INC</a></p>
+    <strong>Disclaimer:</strong><br>
+    Click The Globe Deserves all the right to deletion of Houses that seem to be violating <a href="terms.html">Terms of Use of this Application</a>
+  </center>
+ <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+    <script>
+function openNav() {
+    document.getElementById("mySidenav").style.width = "100%";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
+</script>
+  </body>
+
+</html>

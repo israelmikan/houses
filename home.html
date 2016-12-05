@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Mzigo</title>
+	<meta charset="utf-8">
+	<meta name="author" content="pixelhint.com">
+	<meta name="description" content="La casa free real state fully responsive html5/css3 home page website template"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+	
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/responsive.css">
+	<script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDYue6cIB0yVHi7zTcP9y533KYKnLhcofk",
+    authDomain: "housewhere-590d2.firebaseapp.com",
+    databaseURL: "https://housewhere-590d2.firebaseio.com",
+    storageBucket: "housewhere-590d2.appspot.com",
+    messagingSenderId: "48553609624"
+  };
+  firebase.initializeApp(config);
+  
+	</script>
+
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/main.js"></script>
+</head>
+<body>
+
+
+		<header>
+			<div class="wrapper">
+				<a href="#"><img src="img/logo.png" class="logo" alt="" titl=""/></a>
+				<a href="#" class="hamburger"></a>
+				<nav>
+					<ul><li><a href="index.html">Home</a></li>					
+						<li><a href="uploadmain1.html">Add House</a></li>
+					
+                      
+					</ul>					
+				</nav>
+			</div>
+		</header><!--  end header section  
+
+			<section class="caption">
+				<h2 class="caption">Find You Dream Home</h2>
+				<h3 class="properties">Appartements - Houses - Mansions</h3>
+			</section>-->
+<!--  end hero section  -->
+
+
+	<!--  end search section  -->
+
+
+	<section class="listings">
+		<div class="wrapper">
+			<ul class="properties_list">
+				
+                <script>
+				var roomname;
+			var database = firebase.database();
+			
+ var email="israelmikan@gmail.com";
+var password="dangers";
+ firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // ...
+});
+
+var starCountRef = firebase.database().ref('rooms/');
+starCountRef.on('child_added', function(snapshot) {
+		 roomname=snapshot.val().roomname;
+		var roomprice=snapshot.val().roomprice;
+		var roomlocation=snapshot.val().roomlocation;
+		var roomtype=snapshot.val().roomtype;
+		var roomdetails=snapshot.val().roomdetails;
+		var picture_url=snapshot.val().picture_url;
+		var houselat=snapshot.val().houselat;
+		var houselong=snapshot.val().houselong;
+		var contact_person=snapshot.val().contact_person;
+		var roomid=snapshot.val().roomid;
+		console.log("room name"+roomname);
+		//document.getElementById("room_picture").src = picture_url;
+		//document.getElementById("pricespan").value = roomprice;
+		//document.getElementById("room_details").value = roomdetails;
+		//document.getElementById("saletype").value = roomtype;
+        
+         document.write("<li><a href='#'><img src='"+picture_url+"' id=room_picture alt=''title='' class='property_img'/></a>");
+		 document.write("<span class='price' id='pricespan'>"+roomprice+"</span>");
+	     document.write("<div class='property_details'><h1><a href='#'></a>"+roomname+"</h1><h2 id='room_details'> "+roomdetails+" <span class='property_size' id='saletype'>"+roomtype+"</span></h2></div>");
+		  document.write("</li>");
+
+		}); 
+
+		</script>
+		 <!-- <li><a href='#'><img src='img/property.png' id="room_picture" alt=''title='' class='property_img'/></a>
+		 <span class='price' id="pricespan"></span>
+		  <div class='property_details'><h1><a href='#'></a></h1><h2 id="room_details"> <span class='property_size' id="saletype">(288ftsq)</span></h2></div>
+		  </li> -->
+		  <script> // }); </script>
+			</ul>
+			<div class="more_listing">
+				<!-- <a href="#" class="more_listing_btn">View More Listings</a> -->
+			</div>
+		</div>
+	</section>	<!--  end listing section  -->
+
+	<footer>
+		<div class="wrapper footer">
+			<ul>
+				<li class="links">
+					<ul>
+						
+						<li><a href="terms.html">Terms of Use</a></li>
+						
+						<li><a href="http://israelmikan.branded.me">Contact</a></li>
+					</ul>
+				</li>
+
+				<li class="links">
+					<ul><p>Supported Houses</p>
+						<li><a href="#">Appartements for sale/Rent</a></li>
+						<li><a href="#">Houses for Sale/Rent</a></li>
+						<li><a href="#">Villas/rent/Sale</a></li>
+						<li><a href="#">Mansions for Sale and rent</a></li>
+						<li><a href="#">Office Spaces to let</a></li>
+					</ul>
+				</li>
+
+				
+
+				<li class="about">
+					<p>House where is Amobile app that aims at providing quick access to houses for Purchase rent, Office Space E.t.c</p>
+					<ul>
+						<li><a href="http://facebook.com/clicktheglobe" class="facebook" target="_blank"></a></li>
+						<li><a href="http://twitter.com/clicktheglobe" class="twitter" target="_blank"></a></li>
+						<li><a href="http://plus.google.com/+israelmikan" class="google" target="_blank"></a></li>
+						<!--<li><a href="#" class="skype"></a></li> -->
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="copyrights wrapper">
+			Copyright © 2016 <a href="#" target="_blank" class="ph_link" title="House where Uganda">Click The Globe</a>. All Rights Reserved.
+		</div>
+	</footer><!--  end footer  -->
+
+	
+</body>
+</html>
